@@ -1,0 +1,223 @@
+html{
+    font-family: HelveticaNeue,"Helvetica Neue",Helvetica,Arial,Roboto,sans-serif;
+
+}
+#wrapper {
+    margin-left: 70px;
+    margin-top: 62px;
+    padding: 0px;
+    padding: 10px;
+    height: 100%;
+    position: relative;
+
+}
+.btn-default {
+    background-color: transparent !important;
+    color: #fff !important;
+}
+.fa-fw {
+    text-align: center;
+    width: 1.28571em;
+}
+.headerbar {
+    background-color: #4178be;
+    height: 62px;
+    width: 100%;
+}
+.headermenu .dropdown-toggle {
+    border: 0px none;
+    border-radius: 0px;
+    height: 62px;
+    padding: 12px 10px;
+}
+.headermenu .dropdown-toggle:hover,
+.headermenu .dropdown-toggle:focus,
+.headermenu .dropdown-toggle:active,
+.headermenu .dropdown-toggle.active,
+.headermenu .open .dropdown-toggle.dropdown-toggle {
+    background: none repeat scroll 0% 0% #F9F9F9;
+    box-shadow: none;
+    color: #fff;
+}
+.header-right {
+    float: right;
+    margin-right: 50px;
+}
+.leftpanel {
+background-color: #efc100;
+    height: 100%;
+    left: 0px;
+    position: fixed;
+    top: 62px;
+
+}
+.leftpanel-show {
+    width: 170px;
+}
+.leftpanel-collapsed {
+
+    width: 70px;
+}
+.leftpanel .nav-dash {
+    margin: 5px;
+}
+.leftpanel .nav-dash ul a {
+    text-align: left;
+    padding: 6px 10px;
+    padding-left: 0;
+}
+.leftpanel .nav-dash li a {
+    border-radius: 2px;
+    /*	height: 70px;*/
+    padding: 10px;
+    position: relative;
+    /*text-align: center;*/
+}
+.leftpanel .nav-dash li a i {
+    /*line-height: 45px;
+	width: 45px;*/
+}
+.leftpanel .nav-dash li a span {
+    position: absolute;   
+    padding: 10px 10px 10px 5px;
+    top: 0px;
+    min-width: 70px;
+    text-align: left;
+    z-index: 100;
+    display: none;  
+    border-radius: 2px;
+    left: 60px;
+    height: 49px;
+    font-weight: 700;
+    line-height: 2em;
+}
+
+.leftpanel .nav-dash li.nav-hover ul {
+    display: block;
+    position: absolute;
+    top: 41px;
+    left: 47px;
+    margin: 0;
+    min-width: 172px;
+    background: #1d2939;
+        
+    z-index: 100;
+    -moz-border-radius: 0 0 2px 0;
+    -webkit-border-radius: 0 0 2px 0;
+    border-radius: 0 0 2px 0;
+}
+.leftpanel-collapsed > .nav-dash > li > a:hover {
+    border-radius: 2px 0px 0px 2px;
+    padding: 10px;
+    position: relative;
+}
+.leftpanel-collapsed > .nav-dash li a span {
+    border-radius: 0px 2px 2px 0px;
+    box-shadow: 0px 3px 0px rgba(0, 0, 0, 0.2);
+    height: 49px;
+}
+.leftpanel-collapsed > .nav-dash li.nav-hover a span {
+    display: block;
+    background-color: #FDD600;
+    order-radius: 2px 0px 0px 2px;
+    box-shadow: 0px 3px 0px rgba(0, 0, 0, 0.2);
+}
+.leftpanel .nav-dash li.nav-hover a span {
+    display: block;
+    background-color: #FDD600;
+
+}
+/*<!-- #Leftpanel-Collapse -->*/
+
+
+
+
+
+.mainpanel {
+    height: calc(100vh - 62px);
+    margin-left: 70px;
+    margin-top: 62px;
+    min-height: 580px;
+    padding: 10px;
+}
+.menutoggle {
+    background-color: #323c3c;
+    cursor: pointer;
+    float: left;
+/*    font-size: 22px;*/
+    height: 62px;
+/*    padding: 14px 0px 0px 15px;*/
+    transition: all 0.2s ease-out 0s;
+    width: 70px;
+}
+.menutoggle > i {
+    color: #fff;
+    width: 70px;
+    padding: 15px;
+}
+.nav-dash > li > a {
+    color: #323c3c;
+    padding: 10px 10px;
+}
+.nav-dash > li > a:hover,
+.nav-dash > li > a:active {
+    background-color: #FDD600;
+    box-shadow: 0px 3px 0px rgba(0, 0, 0, 0.2);
+    color: #1D2939;
+}
+.nav-dash > li.active > a,
+.nav-dash > li.active > a:hover,
+.nav-dash > li.active > a:focus {
+    background-color: #1CAF9A;
+}
+.box {
+  margin-bottom: 20px;
+  padding-left: 15px;
+  border-radius: 4px;
+}
+
+.box-header {
+  padding-top: 10px;
+  padding-bottom:10px;
+  border-bottom: 2px solid #8d9797;  
+}
+.box-header > div {
+    display: inline-block;
+}
+.box-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  color: #1d3649;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+.box-title > a {
+  color: inherit;
+}
+.box-action {
+    float:right;  
+    line-height:38px;
+}
+.box-action > a { 
+    color: #8d9797;
+    text-decoration: none;
+    font-weight: 600;    
+}
+.box-action a:hover { 
+    color: #6d7777;  
+}
+.box-action > i { 
+    color: #8d9797;
+    text-decoration: none;
+}
+.box-action > i:hover { 
+    color: #6d7777;
+    cursor: pointer;
+}
+
+.box-body {
+padding-top: 15px;
+}
+
+
+
