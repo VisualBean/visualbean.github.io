@@ -28,6 +28,8 @@
 </body>
 <footer id="footer">
     <div class="finalstatustext"></div>
+    &nbsp;
+    <div> (if you ever experience any trouble, please contact wiseflow@ucc.dk) </div>
 </footer>
 </html>
 <script type="text/javascript">
@@ -71,13 +73,17 @@
             browserSuccess = SetBrowserSuccess();
         }
 
-        var statustext = "You will have no trouble using WiseFlow. (We hope :))";
+        var statustext = "";
         if(!browserSuccess){
         statustext = "Please update your browser to a newer version.";
         }
         if(!flashSuccess)
         {
            statustext += '<br> You can get the newest version of flash <a href="https://get.adobe.com/flashplayer/">here.</a></br>';
+        }
+        if(browserSuccess && flashSuccess)
+        {
+            statustext = "You will have no trouble using WiseFlow.";
         }
 
         $('.finalstatustext').html(statustext);
