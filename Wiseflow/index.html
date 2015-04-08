@@ -59,11 +59,17 @@
             browserSuccess = SetBrowserSuccess();
         }
         if(browser.name == "Safari" && bVersion >= 6)
-        {}
+        {
+            browserSuccess = SetBrowserSuccess();
+        }
         if(browser.name == "Chrome" && bVersion >= 25)
-        {}
+        {
+            browserSuccess = SetBrowserSuccess();
+        }
         if(browser.name == "Opera" && bVersion >= 12)
-        {}
+        {
+            browserSuccess = SetBrowserSuccess();
+        }
 
         var statustext = "You will have no trouble using WiseFlow. (We hope :))";
         if(!browserSuccess){
