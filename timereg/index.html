@@ -10,7 +10,6 @@
     <link  href="css/fullcalendar.min.css" rel="stylesheet">
     <link href="css/timeregister.css" type="text/css" rel="stylesheet">
 
-
     <script src="js/jquery-1.11.2.min.js"></script>
     <script src="js/jquery-ui.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -18,10 +17,8 @@
     <script src="js/pikaday.js"></script>
     <script type="text/javascript" src="js/fullcalendar.min.js"></script>
 
-
-
 </head>
-<body>
+<body >
 <div class="container">
     <div class="row row-centered">
         <h1>Atea Tidsregistrering</h1>
@@ -155,7 +152,7 @@
             }
         });
     });
-    $(document).on("pagecreate",function() {
+    /*$(document).on("pagecreate",function() {
         $("#slider").slider({
             range: false,
             min: 0,
@@ -172,7 +169,7 @@
                 $('#time').html(hours+':'+minutes);
             }
         });
-    });
+    });*/
 </script>
 <script>
     $(document).ready(function() {
@@ -225,5 +222,10 @@
                     $('#calendar').fullCalendar('gotoDate', picker.getMoment())}
             });
 
+</script>
+<script>
+    $("#AddEventModal").draggable({
+        handle: ".modal-header"
+    });
 </script>
 </html>
