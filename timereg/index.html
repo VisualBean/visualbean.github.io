@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="css/jquery-ui.min.css" type="text/css" rel="stylesheet">
+    <link href="css/centered.css" type="text/css" rel="stylesheet">
+    <link href="css/pikaday.css" type="text/css" rel="stylesheet">
+    <link  href="css/fullcalendar.min.css" rel="stylesheet">
+    <link href="css/timeregister.css" type="text/css" rel="stylesheet">
+
+
+    <script src="js/jquery-1.11.2.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="js/pikaday.js"></script>
+    <script type="text/javascript" src="js/fullcalendar.min.js"></script>
+
+
+
+</head>
+<body>
+<div class="container">
+    <div class="row row-centered">
+        <h1>Atea Tidsregistrering</h1>
+    </div>
+    <div class="row row-centered" style="margin-bottom:20px;">
+        <div class="col-md-1 col-centered">
+            <span id="previous-date" class=" mover glyphicon glyphicon-chevron-left pull-left"></span>
+        </div>
+        <div class="col-md-3 col-centered">
+            <div class="datepicker">
+                <span id="datepicker"></span>
+                <hidden id="datepicker-input"></hidden>
+                <span id="datepicker-icon" class="glyphicon glyphicon-calendar"></span>
+            </div>
+        </div>
+        <div class="col-md-1 col-centered ">
+            <span id="next-date" class=" mover glyphicon glyphicon-chevron-right pull-right"></span>
+        </div>
+    </div>
+    <div class="row row-centered">
+        <div class="panel panel-default">
+        	<div class="panel-body">
+
+                <div id="calendar"></div>
+        	</div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-danger pull-left"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Discard Week</button>
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save Week</button>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="AddEventModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <div  style="margin-bottom:15px;">
+                    <div class="btn-group" >
+                        <button class="btn btn-default dropdown-toggle" type="button" id="category-dropdown" data-toggle="dropdown">
+                            Categories
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="category-dropdown">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Development</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Platform</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Internal</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Customer Operations</a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-default dropdown-toggle disabled" type="button" id="customer-dropdown" data-toggle="dropdown">
+                            Customer
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="customer-dropdown">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="case-dropdown" data-toggle="dropdown">
+                            Case
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="case-dropdown">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="input-group pull-left push-right" style="width:110px;">
+                        <span class="input-group-addon glyphicon glyphicon-time" ></span>
+                        <input type="text" class="form-control" placeholder="Hours">
+                    </div>
+                    <div class="btn-group pull-left push-right" style="margin-bottom:5px;">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="hour-type-dropdown" data-toggle="dropdown">
+                            Hour Type
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="hour-type-dropdown">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+                        </ul>
+                    </div>
+                    <div class="checkbox btn-group">
+                        <label><input type="checkbox" value="">Invoiceable?</label>
+                    </div>
+                    <div style="clear:left">
+                        <div>Time of day:</div>
+                        <div id="slider" style="width:150px;"></div>
+                        <div id="time">0:00</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Discard</button>
+                <button type="button" class="btn btn-success">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</body>
+<script>
+    $(function() {
+        $("#slider").slider({
+            range: false,
+            min: 0,
+            max: 1440,
+            step: 15,
+            slide: function(e, ui) {
+                var hours = Math.floor(ui.value / 60);
+                var minutes = ui.value - (hours * 60);
+
+                if(hours.length == 1) hours = '0' + hours;
+                var minutes = minutes+"";
+                if(minutes.length == 1) minutes = '0' + minutes;
+
+                $('#time').html(hours+':'+minutes);
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        // page is now ready, initialize the calendar...
+        $('#calendar').fullCalendar({
+            header: false,
+            defaultView: 'basicWeek',
+            height: 300,
+            firstDay: 1,
+            columnFormat: 'ddd D/MM',
+            dayClick: function(date, jsEvent, view) {
+                $('#AddEventModal').modal('show');
+                var modal = $('#AddEventModal');
+                modal.find('.modal-title').text((moment(date).format('ddd D/MM')));
+            }
+            // put your options and callbacks here
+        })
+
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $(document).on('click', '#previous-date', function(){
+            $('#calendar').fullCalendar('prev');
+            var moment = $('#calendar').fullCalendar('getDate');
+            field.innerHTML =(moment).format('D/MM/YYYY');
+        });
+
+        $(document).on('click', '#next-date', function(){
+            $('#calendar').fullCalendar('next');
+            var moment = $('#calendar').fullCalendar('getDate');
+            field.innerHTML =(moment).format('D/MM/YYYY');
+        });
+
+    });
+</script>
+<script>
+    var field = document.getElementById('datepicker');
+    var calendar = document.getElementById('calendar')
+    var picker = new Pikaday(
+            {
+                field: document.getElementById('datepicker-input'),
+                trigger: document.getElementById('datepicker-icon'),
+                format : 'D/MM/YYYY',
+                minDate: new Date('2000-01-01'),
+                maxDate: new Date('2050-12-31'),
+                yearRange: [2015,2050],
+                onSelect : function(date) {
+                    field.innerHTML = picker.toString();
+                    $('#calendar').fullCalendar('gotoDate', picker.getMoment())}
+            });
+
+</script>
+</html>
