@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Golden Rules of Source Control</title>
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/centered.css">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Lato">
+    <script src="js/jquery-1.11.2.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<h1>
+    <span class="glyphicon glyphicon-tower"></span>
+    Golden Rules of Source Control
+    <span class="glyphicon glyphicon-tower"></span>
+</h1>
+<div class="container">
+    <div class="row row-centered">
+        <div class="col-lg-7 col-centered">
+            <div class="alert alert-warning">
+
+                   <h5>#1: Compilation output does not belong in source control.</h5>  &nbsp;
+				   <div><h5>#2: Add Dependencies to Source Control&nbsp;</h5><h6>(If not using Nuget or similar) </h6></div>
+                   
+                   <h5>#3: "Pull" newest version before starting work.</h5> &nbsp;
+                <h5>#4: "Commit" only completed code.</h5> &nbsp;
+                <h5>#5: "Stash" non-completed code for later (if you have too).</h5>
+                <ul>
+                    <li class="do">...before checking out a different branch.</li>
+                    <li class="do">...before pulling remote changes.</li>
+                    <li class="do">...before merging or rebasing a branch.</li>
+                </ul>&nbsp;
+                <h5>#6: "Commit" only working code.</h5> &nbsp;
+                <h5>#7: "Commit" only related changes.</h5>
+                <ul>
+                    <li class="dont">Don't commit, a fix for bug #122 and a change to your login page, in a single commit.</li>
+                </ul>&nbsp;
+                <h5>#8: Write good commit messages.(short and simple is key)</h5>
+                <ul>
+                    <li class="dont">Don't write something like "Code updated! :)".</li>
+                    <li class="do">Write something like "Changed all "Somename" to "SomeName." ". </li>
+                </ul>
+                &nbsp;
+                <h5>#9: Use branches extensively</h5> &nbsp;
+				<h5>#10: Have fun</h5>
+
+
+            </div>
+
+        </div>
+    </div>
+    <div class="row-centered">
+        <img src="img/basic-remote-workflow.png" width="60%" height="60%">
+    </div>
+</div>
+</body>
+</html>

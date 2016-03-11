@@ -1,0 +1,42 @@
+.row-centered {
+    text-align:center;
+}
+.col-centered {
+    display:inline-block;
+    float:none;
+    /* reset the text-align */
+    text-align:left;
+    /* inline-block space fix */
+    margin-right:-4px;
+}
+h1 {
+    margin:40px 0px 20px 0px;
+    color:#5D6268;
+    font-size:28px;
+    line-height:34px;
+    text-align:center;
+}
+
+h5 {
+    color:#5D6268;
+    margin-bottom: 12px;
+    font-family: "Lato" !important;
+    font-style: normal;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0px;
+    line-height: 1em;
+}
+ul {
+    list-style-type: none ;
+}
+li {
+    color:#5D6268;
+    font-weight: 700;
+}
+.do{
+    color:#27ae60
+}
+.dont {
+    color:#e74c3c
+}
