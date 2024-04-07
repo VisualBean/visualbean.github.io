@@ -202,7 +202,7 @@
     <script>
       function downloadPDF() {
         const element = document.getElementById("resume");
-        html2pdf(element);
+        html2pdf().set({filename: "alex-resume.pdf"}).from(element).save();
       }
     </script>
   </body>
