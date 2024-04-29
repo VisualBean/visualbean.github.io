@@ -5,15 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Resume</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <style>
+      @media print {
+      body {
+        background-color: white !important;
+      }
+      .html2pdf__page-break {
+          page-break-before: always;
+          /* You can also use page-break-after if needed */
+      }
+      .shadow-lg {
+        box-shadow: none !important;
+      }
+}
+    </style>
   </head>
   <body class="bg-gray-100 mx-auto">
-    <button
-    class="bg-blue-500 hover:bg-blue-700 mb-4 text-white font-bold py-2 px-4 rounded mt-4"
-    onclick="downloadPDF()"
-  >
-    Download as PDF
-  </button>
     <div id="resume" class="container mx-auto bg-white p-6 shadow-lg max-w-4xl">
       <div class="flex justify-between items-center mb-4">
         <div class="flex">
@@ -46,7 +53,7 @@
       </div>
       <div class="grid grid-cols-12 gap-4">
         <div class="col-span-8">
-          <h2 class="text-xl font-bold mb-2">Employment History</h2>
+          <h2 class="text-xl font-bold mb-4">Employment History</h2>
           <div class="mb-4 space-y-8">
             <div class="flex items-start">
               <img
@@ -97,6 +104,7 @@
                 alt="Company Logo"
                 class="w-12 h-12 mr-4"
               />
+              <div class="html2pdf__page-break"></div>
               <div>
                 <h3 class="font-bold text-base">
                   DDD Evangelist @ Danske Bank
@@ -113,7 +121,6 @@
                 </p>
               </div>
             </div>
-            <div class="html2pdf__page-break"></div>
             <div class="flex items-start">
               <img
                 src="data:image/jpg;base64,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"
@@ -172,6 +179,7 @@
                 alt="Company Logo"
                 class="w-12 h-12 mr-4"
               />
+              <div class="html2pdf__page-break"></div>
               <div>
                 <h3 class="font-bold text-base">
                   Software Engineer & Cloud Architect @ Atea
@@ -190,6 +198,34 @@
               </div>
             </div>
           </div>
+
+          <h2 class="text-xl font-bold mt-12 mb-4">Education</h2>
+            <div class="mb-2 space-y-8">
+              <div class="flex items-start">
+                <img
+                  src="data:image/jpg;base64,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"
+                  alt="Company Logo"
+                  class="w-12 h-12 mr-4"
+                />
+                <div>
+                  <h3 class="font-bold text-base">
+                    Data technician - Apprenticeship @ University of Aarhus
+                  </h3>
+                  <p class="text-base mb-4">2009–2014</p>
+                  <p class="text-sm">
+                    2 years as an IT Support Specialist; <br>
+                    Role: Assisted colleagues and customers with software and hardware-related issues.
+                    Skills Acquired: Troubleshooting, problem-solving, and effective communication. <br>
+                    3 years as a Data Technician with a Specialization in Infrastructure; <br>
+                    Role: Designed and managed complex networks, including those spanning multiple company locations.
+                    Responsibilities:
+                    Ensured network functionality.
+                    Maintained security measures.
+                    Managed general server infrastructure as an IT-Admin
+                  </p>
+                </div>
+              </div>
+            </div>
         </div>
 
         <!-- Right Column -->
@@ -240,11 +276,5 @@
         </div>
       </div>
     </div>
-    <script>
-      function downloadPDF() {
-        const element = document.getElementById("resume");
-        html2pdf().set({filename: "alex-resume.pdf"}).from(element).save();
-      }
-    </script>
   </body>
 </html>
