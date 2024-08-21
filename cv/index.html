@@ -17,6 +17,9 @@
       .shadow-lg {
         box-shadow: none !important;
       }
+      .noprint {
+              visibility: hidden;
+      }
       * {
         -webkit-print-color-adjust: exact !important;
         color-adjust: exact !important;
@@ -35,8 +38,8 @@
           </p>
         </div>
         <div class="flex-grow"></div>
-        <div>
-        <button class="px-4 py-2 rounded-lg shadow-md hover:bg-gray-100 focus:outline-none print:hidden" onclick="window.print()">
+        <div class="print:hidden .noprint">
+        <button class="px-4 py-2 rounded-lg shadow-md hover:bg-gray-100 focus:outline-none" onclick="window.print()">
           <img src="https://cdn-icons-png.flaticon.com/512/2787/2787698.png" width="40" height="40" alt="print">
         </button>
       </div>
