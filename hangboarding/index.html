@@ -188,11 +188,14 @@
 
         .modal-content {
             background: #2a2a2a;
-            margin: 50px auto;
+            margin: 20px auto;
             padding: 30px;
             border-radius: 12px;
             max-width: 500px;
             width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
         }
 
         .modal-header {
@@ -233,6 +236,9 @@
 
         .sets-container {
             margin-top: 20px;
+            max-height: 50vh;
+            overflow-y: auto;
+            padding-right: 5px;
         }
 
         .set-item {
@@ -288,6 +294,17 @@
             
             .set-fields {
                 grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                margin: 10px auto;
+                padding: 20px;
+                width: 95%;
+                max-height: 95vh;
+            }
+            
+            .sets-container {
+                max-height: 40vh;
             }
         }
     </style>
@@ -379,14 +396,15 @@
             document.getElementById('routineSelect').addEventListener('change', selectRoutine);
         }
 
-
+        // Storage functions (localStorage commented out for Claude.ai compatibility)
         function saveToStorage() {
-            localStorage.setItem('hangboard-routines', JSON.stringify(routines));
+            // localStorage.setItem('hangboard-routines', JSON.stringify(routines));
         }
 
         function loadFromStorage() {
-            const stored = localStorage.getItem('hangboard-routines');
-            return stored ? JSON.parse(stored) : [];
+            // const stored = localStorage.getItem('hangboard-routines');
+            // return stored ? JSON.parse(stored) : [];
+            return [];
         }
 
         function loadRoutines() {
@@ -448,6 +466,7 @@
             if (!currentRoutine || currentRoutine.sets.length === 0) return;
 
             if (!isRunning && !isPaused) {
+                // Starting fresh
                 currentSetIndex = 0;
                 currentRepIndex = 0;
                 currentPhase = 'work';
@@ -501,17 +520,20 @@
             const currentSet = currentRoutine.sets[currentSetIndex];
             
             if (currentPhase === 'work') {
-
+                // Switch to rest
                 currentPhase = 'rest';
                 timeRemaining = currentSet.restDuration;
             } else {
+                // Move to next repetition or set
                 currentRepIndex++;
                 
                 if (currentRepIndex >= currentSet.repetitions) {
+                    // Move to next set
                     currentSetIndex++;
                     currentRepIndex = 0;
                     
                     if (currentSetIndex >= currentRoutine.sets.length) {
+                        // Routine completed
                         stopTimer();
                         alert('Routine completed! Great job!');
                         return;
