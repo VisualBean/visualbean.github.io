@@ -8,9 +8,13 @@
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col items-center justify-center p-4">
     <div class="w-full max-w-2xl">
+        <!-- Title -->
         <h1 class="text-4xl font-bold text-gray-800 text-center mb-8">Dependency Exposer</h1>
+
+        <!-- Input Form -->
         <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
             <div class="space-y-6">
+                <!-- Package Name Input -->
                 <div>
                     <label for="packageName" class="block text-sm font-medium text-gray-700 mb-2">Package Name</label>
                     <input
@@ -20,6 +24,9 @@
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
                     >
                 </div>
+                <div id="autocompleteSuggestions" class="mt-2 bg-white border border-gray-300 rounded-lg shadow-lg hidden absolute z-50 w-full max-w-2xl"></div>
+
+                <!-- Ecosystem Dropdown -->
                 <div>
                     <label for="ecosystem" class="block text-sm font-medium text-gray-700 mb-2">Package Ecosystem</label>
                     <select
@@ -31,6 +38,8 @@
                         <option value="pypi">PyPI</option>
                     </select>
                 </div>
+
+                <!-- Analyze Button -->
                 <button
                     id="analyzeBtn"
                     onclick="analyzeDependencies()"
@@ -40,6 +49,8 @@
                 </button>
             </div>
         </div>
+
+        <!-- Loading Indicator -->
         <div id="loading" class="hidden text-center py-8">
             <div class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-blue-600 bg-white">
                 <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -49,12 +60,15 @@
                 Analyzing dependencies...
             </div>
         </div>
+
+        <!-- Results -->
         <div id="results" class="hidden bg-white rounded-lg shadow-lg p-8">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Dependencies</h2>
             <div id="dependencyList" class="space-y-2"></div>
             <div id="stats" class="mt-6 p-4 bg-gray-50 rounded-lg text-sm text-gray-600"></div>
         </div>
 
+        <!-- Error Display -->
         <div id="error" class="hidden bg-red-50 border border-red-200 rounded-lg p-6">
             <div class="flex">
                 <div class="flex-shrink-0">
@@ -84,6 +98,7 @@
                 return;
             }
 
+            // Reset state
             allDependencies.clear();
             processedPackages.clear();
             circularDeps.clear();
@@ -124,6 +139,7 @@
 
                 dependencies.forEach(dep => allDependencies.add(dep));
 
+                // Recursively process dependencies concurrently
                 if (depth < 10) {
                     await Promise.all(
                         dependencies.map(dep => findDependencies(dep, ecosystem, depth + 1))
@@ -154,6 +170,7 @@
         }
 
         async function getNuGetDependencies(packageName) {
+            // Using NuGet's API v3
             const searchResponse = await fetch(`https://api.nuget.org/v3-flatcontainer/${encodeURIComponent(packageName.toLowerCase())}/index.json`);
 
             if (!searchResponse.ok) {
@@ -163,6 +180,7 @@
             const versionData = await searchResponse.json();
             const latestVersion = versionData.versions[versionData.versions.length - 1];
 
+            // Get package details for the latest version
             const packageResponse = await fetch(`https://api.nuget.org/v3-flatcontainer/${encodeURIComponent(packageName.toLowerCase())}/${latestVersion}/${packageName.toLowerCase()}.nuspec`);
 
             if (!packageResponse.ok) {
@@ -170,6 +188,8 @@
             }
 
             const nuspecText = await packageResponse.text();
+
+            // Parse XML to extract dependencies (basic parsing)
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(nuspecText, 'text/xml');
             const dependencyElements = xmlDoc.querySelectorAll('dependency');
@@ -187,7 +207,7 @@
 
         async function getPyPIDependencies(packageName) {
             try {
-
+                // Use PyPI's JSON API
                 const response = await fetch(`https://pypi.org/pypi/${encodeURIComponent(packageName)}/json`);
 
                 if (!response.ok) {
@@ -203,6 +223,7 @@
 
                 const dependencies = new Set();
 
+                // Extract dependencies from requires_dist
                 if (info.requires_dist && Array.isArray(info.requires_dist)) {
                     info.requires_dist.forEach(req => {
                         // Parse requirement string to extract package name
@@ -231,6 +252,7 @@
             const lowerName = packageName.toLowerCase();
             const lowerReq = requirementString.toLowerCase();
 
+            // Check if it's an extra dependency (optional)
             if (lowerReq.includes('extra ==')) {
                 return true;
             }
@@ -244,8 +266,10 @@
             const dependencyList = document.getElementById('dependencyList');
             const stats = document.getElementById('stats');
 
+            // Convert Set to sorted array
             const sortedDependencies = Array.from(allDependencies).sort();
 
+            // Clear previous results
             dependencyList.innerHTML = '';
 
             if (sortedDependencies.length === 0) {
@@ -316,11 +340,87 @@
             document.getElementById('results').classList.add('hidden');
         }
 
+        // Allow Enter key to trigger analysis
         document.getElementById('packageName').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 analyzeDependencies();
             }
         });
+
+        const packageInput = document.getElementById('packageName');
+    const ecosystemSelect = document.getElementById('ecosystem');
+    const suggestionBox = document.getElementById('autocompleteSuggestions');
+
+    let debounceTimeout;
+
+    packageInput.addEventListener('input', () => {
+        clearTimeout(debounceTimeout);
+        const query = packageInput.value.trim();
+
+        if (query.length < 3) {
+            hideSuggestions();
+            return;
+        }
+
+        debounceTimeout = setTimeout(() => {
+            const ecosystem = ecosystemSelect.value;
+            fetchSuggestions(query, ecosystem);
+        }, 300); // Debounce for performance
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!suggestionBox.contains(e.target) && e.target !== packageInput) {
+            hideSuggestions();
+        }
+    });
+
+    async function fetchSuggestions(query, ecosystem) {
+        try {
+            let suggestions = [];
+
+            if (ecosystem === 'npm') {
+                const res = await fetch(`https://registry.npmjs.org/-/v1/search?text=${encodeURIComponent(query)}&size=10`);
+                const data = await res.json();
+                suggestions = data.objects.map(obj => obj.package.name);
+            } else if (ecosystem === 'nuget') {
+                const res = await fetch(`https://api-v2v3search-0.nuget.org/autocomplete?q=${encodeURIComponent(query)}&take=10`);
+                const data = await res.json();
+                suggestions = data.data;
+            } else if (ecosystem === 'pypi') {
+                const res = await fetch(`https://pypi.org/search/?q=${encodeURIComponent(query)}`);
+                const text = await res.text();
+                const matches = [...text.matchAll(/<a[^>]*href="\/project\/([^/]+)\/"/g)];
+                suggestions = [...new Set(matches.map(m => m[1]))].slice(0, 10);
+            }
+
+            showSuggestions(suggestions);
+        } catch (error) {
+            console.warn('Autocomplete error:', error);
+            hideSuggestions();
+        }
+    }
+
+    function showSuggestions(suggestions) {
+        if (suggestions.length === 0) {
+            hideSuggestions();
+            return;
+        }
+
+        suggestionBox.innerHTML = suggestions.map(pkg =>
+            `<div class="px-4 py-2 hover:bg-blue-100 cursor-pointer text-sm" onclick="selectSuggestion('${pkg}')">${pkg}</div>`
+        ).join('');
+        suggestionBox.classList.remove('hidden');
+    }
+
+    function hideSuggestions() {
+        suggestionBox.classList.add('hidden');
+        suggestionBox.innerHTML = '';
+    }
+
+    function selectSuggestion(pkgName) {
+        packageInput.value = pkgName;
+        hideSuggestions();
+    }
     </script>
 </body>
 </html>
