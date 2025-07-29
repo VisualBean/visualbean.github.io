@@ -107,7 +107,7 @@
             hideResults();
 
             try {
-                await findDependencies(packageName, ecosystem, 0);
+                await findDependencies(packageName, ecosystem);
                 displayResults(packageName, ecosystem);
             } catch (error) {
                 showError(`Failed to analyze dependencies: ${error.message}`);
@@ -116,7 +116,7 @@
             }
         }
 
-        async function findDependencies(packageName, ecosystem, depth = 0) {
+        async function findDependencies(packageName, ecosystem) {
             const packageKey = `${ecosystem}:${packageName}`;
             if (processedPackages.has(packageKey)) {
                 circularDeps.add(packageName);
@@ -139,7 +139,7 @@
                 dependencies.forEach(dep => allDependencies.add(dep));
 
                 await Promise.all(
-                    dependencies.map(dep => findDependencies(dep, ecosystem, depth + 1))
+                    dependencies.map(dep => findDependencies(dep, ecosystem))
                 );
 
             } catch (error) {
