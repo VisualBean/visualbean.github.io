@@ -38,7 +38,6 @@
                         <option value="pypi">PyPI</option>
                     </select>
                 </div>
-
                 <!-- Analyze Button -->
                 <button
                     id="analyzeBtn"
@@ -139,12 +138,9 @@
 
                 dependencies.forEach(dep => allDependencies.add(dep));
 
-                // Recursively process dependencies concurrently
-                if (depth < 10) {
-                    await Promise.all(
-                        dependencies.map(dep => findDependencies(dep, ecosystem, depth + 1))
-                    );
-                }
+                await Promise.all(
+                    dependencies.map(dep => findDependencies(dep, ecosystem, depth + 1))
+                );
 
             } catch (error) {
                 console.warn(`Failed to get dependencies for ${packageName}:`, error);
