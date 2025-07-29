@@ -249,7 +249,7 @@
             dependencyList.innerHTML = '';
 
             if (sortedDependencies.length === 0) {
-                dependencyList.innerHTML = '<p class="text-gray-500 italic">No dependencies found or package has no dependencies.</p>';
+                dependencyList.innerHTML = '<p class="text-gray-500 italic">No dependencies found or package does not exist.</p>';
             } else {
                 sortedDependencies.forEach(dep => {
                     const depElement = document.createElement('div');
