@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangboard Trainer</title>
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiSGFuZ2JvYXJkIFRyYWluZXIiLCJzaG9ydF9uYW1lIjoiSGFuZ2JvYXJkIiwiZGVzY3JpcHRpb24iOiJIYW5nYm9hcmQgdHJhaW5pbmcgYXBwIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMxYTFhMWEiLCJ0aGVtZV9jb2xvciI6IiMwMDdmZmYiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCNGJXeHVjejBpYUhSMGNEb3ZMM2QzZHk1M00zVnZjbWN2TWpBd01DOXpkbWNpSUhacFpYZENiM2c5SWpBZ01DQXlOQ0F5TkNJK1BISmxZM1FnYUdWcFoyaDBQU0l5TkNJZ2QybGtkR2c5SWpJMElpQm1hV3hzUFNJak1EQTNabVptSWk4K1BDOXpkbWMrIiwic2l6ZXMiOiIyNHgyNCIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn1dfQ==">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a1a;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 300;
+            color: #007fff;
+            margin-bottom: 10px;
+        }
+
+        .routine-selector {
+            margin-bottom: 30px;
+        }
+
+        .routine-dropdown {
+            width: 100%;
+            padding: 12px;
+            background: #2a2a2a;
+            border: 1px solid #404040;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .routine-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary {
+            background: #007fff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0066cc;
+        }
+
+        .btn-secondary {
+            background: #404040;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #505050;
+        }
+
+        .btn-danger {
+            background: #ff4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #cc3333;
+        }
+
+        .timer-display {
+            text-align: center;
+            margin: 40px 0;
+            padding: 40px 20px;
+            background: #2a2a2a;
+            border-radius: 12px;
+            border: 2px solid #404040;
+        }
+
+        .timer {
+            font-size: 72px;
+            font-weight: 200;
+            margin-bottom: 20px;
+            color: #007fff;
+        }
+
+        .current-position {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .set-progress {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .next-up {
+            font-size: 18px;
+            color: #888;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .control-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 100px;
+        }
+
+        .start-btn {
+            background: #00cc44;
+            color: white;
+        }
+
+        .start-btn:hover {
+            background: #00aa33;
+        }
+
+        .pause-btn {
+            background: #ffaa00;
+            color: white;
+        }
+
+        .pause-btn:hover {
+            background: #dd8800;
+        }
+
+        .stop-btn {
+            background: #ff4444;
+            color: white;
+        }
+
+        .stop-btn:hover {
+            background: #cc3333;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #2a2a2a;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #007fff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 1px solid #404040;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 1px solid #404040;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .sets-container {
+            margin-top: 20px;
+            max-height: 50vh;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .set-item {
+            background: #1a1a1a;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border: 1px solid #404040;
+        }
+
+        .set-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .set-fields {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .working {
+            background: #00cc44 !important;
+        }
+
+        .resting {
+            background: #ffaa00 !important;
+        }
+
+        @media (max-width: 480px) {
+            .timer {
+                font-size: 56px;
+            }
+            
+            .current-position {
+                font-size: 20px;
+            }
+            
+            .control-btn {
+                padding: 12px 20px;
+                font-size: 14px;
+                min-width: 80px;
+            }
+            
+            .set-fields {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                margin: 10px auto;
+                padding: 20px;
+                width: 95%;
+                max-height: 95vh;
+            }
+            
+            .sets-container {
+                max-height: 40vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Hangboard Trainer</h1>
+        </div>
+
+        <div class="routine-selector">
+            <select class="routine-dropdown" id="routineSelect">
+                <option value="">Select a routine...</option>
+            </select>
+            <div class="routine-buttons">
+                <button class="btn btn-primary" onclick="showCreateModal()">New Routine</button>
+                <button class="btn btn-secondary" onclick="editCurrentRoutine()" id="editBtn" disabled>Edit</button>
+                <button class="btn btn-danger" onclick="deleteCurrentRoutine()" id="deleteBtn" disabled>Delete</button>
+            </div>
+        </div>
+
+        <div class="timer-display">
+            <div class="timer" id="timer">0:00</div>
+            <div class="set-progress" id="setProgress"></div>
+            <div class="current-position" id="currentPosition">Select a routine to start</div>
+            <div class="next-up" id="nextUp"></div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn start-btn" onclick="startTimer()" id="startBtn" disabled>Start</button>
+            <button class="control-btn pause-btn" onclick="pauseTimer()" id="pauseBtn" disabled>Pause</button>
+            <button class="control-btn stop-btn" onclick="stopTimer()" id="stopBtn" disabled>Stop</button>
+        </div>
+    </div>
+
+    <!-- Modal for creating/editing routines -->
+    <div class="modal" id="routineModal">
+        <div class="modal-content">
+            <div class="modal-header" id="modalTitle">Create New Routine</div>
+            
+            <div class="form-group">
+                <label class="form-label">Routine Name</label>
+                <input type="text" class="form-input" id="routineName" placeholder="Enter routine name">
+            </div>
+
+            <div class="sets-container">
+                <div class="form-label">Sets</div>
+                <div id="setsContainer"></div>
+                <button class="btn btn-secondary" onclick="addSet()">Add Set</button>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveRoutine()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('data:application/javascript;base64,Y29uc3QgQ0FDSEVfTkFNRSA9ICdoYW5nYm9hcmQtdHJhaW5lci12MSc7CmNvbnN0IHVybHNUb0NhY2hlID0gWwogICAgJy4vJywKICAgICcuL2luZGV4Lmh0bWwnCl07CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ2luc3RhbGwnLCBldmVudCA9PiB7CiAgICBldmVudC53YWl0VW50aWwoCiAgICAgICAgY2FjaGVzLm9wZW4oQ0FDSEVfTkFNRSkKICAgICAgICAgICAgLnRoZW4oY2FjaGUgPT4gY2FjaGUuYWRkQWxsKHVybHNUb0NhY2hlKSkKICAgICk7Cn0pOwoKc2VsZi5hZGRFdmVudExpc3RlbmVyKCdmZXRjaCcsIGV2ZW50ID0+IHsKICAgIGV2ZW50LnJlc3BvbmRXaXRoKAogICAgICAgIGNhY2hlcy5tYXRjaChldmVudC5yZXF1ZXN0KQogICAgICAgICAgICAudGhlbihyZXNwb25zZSA9PiB7CiAgICAgICAgICAgICAgICBpZiAocmVzcG9uc2UpIHsKICAgICAgICAgICAgICAgICAgICByZXR1cm4gcmVzcG9uc2U7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICByZXR1cm4gZmV0Y2goZXZlbnQucmVxdWVzdCk7CiAgICAgICAgICAgIH0pCiAgICApOwp9KTs=')
+                .then(() => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed'));
+        }
+
+        // App State
+        let routines = [];
+        let currentRoutine = null;
+        let currentSetIndex = 0;
+        let currentRepIndex = 0;
+        let currentPhase = 'work'; // 'work' or 'rest'
+        let timeRemaining = 0;
+        let timerInterval = null;
+        let isRunning = false;
+        let isPaused = false;
+        let editingRoutineId = null;
+
+        const handPositions = ['Half Crimp', 'Open Hand', 'Front 2', 'Back 2', '3-Finger Drag'];
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', () => {
+            loadRoutines();
+            updateUI();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('routineSelect').addEventListener('change', selectRoutine);
+        }
+
+        // Storage functions (localStorage commented out for Claude.ai compatibility)
+        function saveToStorage() {
+            // localStorage.setItem('hangboard-routines', JSON.stringify(routines));
+        }
+
+        function loadFromStorage() {
+            // const stored = localStorage.getItem('hangboard-routines');
+            // return stored ? JSON.parse(stored) : [];
+            return [];
+        }
+
+        function loadRoutines() {
+            routines = loadFromStorage();
+            updateRoutineDropdown();
+        }
+
+        function updateRoutineDropdown() {
+            const select = document.getElementById('routineSelect');
+            select.innerHTML = '<option value="">Select a routine...</option>';
+            
+            routines.forEach((routine, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                const totalTime = calculateTotalTime(routine);
+                option.textContent = `${routine.name} (${formatTime(totalTime)})`;
+                select.appendChild(option);
+            });
+        }
+
+        function calculateTotalTime(routine) {
+            let total = 0;
+            routine.sets.forEach(set => {
+                total += (set.workDuration + set.restDuration) * set.repetitions;
+            });
+            return total;
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            if (minutes > 0) {
+                return `${minutes}m ${secs}s`;
+            }
+            return `${secs}s`;
+        }
+
+        function selectRoutine() {
+            const select = document.getElementById('routineSelect');
+            const index = select.value;
+            
+            if (index === '') {
+                currentRoutine = null;
+                document.getElementById('editBtn').disabled = true;
+                document.getElementById('deleteBtn').disabled = true;
+                document.getElementById('startBtn').disabled = true;
+            } else {
+                currentRoutine = routines[index];
+                document.getElementById('editBtn').disabled = false;
+                document.getElementById('deleteBtn').disabled = false;
+                document.getElementById('startBtn').disabled = false;
+                resetTimer();
+            }
+            updateUI();
+        }
+
+        // Timer functions
+        function startTimer() {
+            if (!currentRoutine || currentRoutine.sets.length === 0) return;
+
+            if (!isRunning && !isPaused) {
+                // Starting fresh
+                currentSetIndex = 0;
+                currentRepIndex = 0;
+                currentPhase = 'work';
+                timeRemaining = currentRoutine.sets[0].workDuration;
+            }
+
+            isRunning = true;
+            isPaused = false;
+            
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    nextPhase();
+                }
+            }, 1000);
+
+            updateControlButtons();
+            updateUI();
+        }
+
+        function pauseTimer() {
+            isRunning = false;
+            isPaused = true;
+            clearInterval(timerInterval);
+            updateControlButtons();
+        }
+
+        function stopTimer() {
+            isRunning = false;
+            isPaused = false;
+            clearInterval(timerInterval);
+            resetTimer();
+            updateControlButtons();
+            updateUI();
+        }
+
+        function resetTimer() {
+            currentSetIndex = 0;
+            currentRepIndex = 0;
+            currentPhase = 'work';
+            if (currentRoutine && currentRoutine.sets.length > 0) {
+                timeRemaining = currentRoutine.sets[0].workDuration;
+            } else {
+                timeRemaining = 0;
+            }
+        }
+
+        function nextPhase() {
+            const currentSet = currentRoutine.sets[currentSetIndex];
+            
+            if (currentPhase === 'work') {
+                // Switch to rest
+                currentPhase = 'rest';
+                timeRemaining = currentSet.restDuration;
+            } else {
+                // Move to next repetition or set
+                currentRepIndex++;
+                
+                if (currentRepIndex >= currentSet.repetitions) {
+                    // Move to next set
+                    currentSetIndex++;
+                    currentRepIndex = 0;
+                    
+                    if (currentSetIndex >= currentRoutine.sets.length) {
+                        // Routine completed
+                        stopTimer();
+                        alert('Routine completed! Great job!');
+                        return;
+                    }
+                }
+                
+                currentPhase = 'work';
+                timeRemaining = currentRoutine.sets[currentSetIndex].workDuration;
+            }
+            
+            updateUI();
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timer').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateUI() {
+            updateTimerDisplay();
+            
+            if (!currentRoutine || currentRoutine.sets.length === 0) {
+                document.getElementById('currentPosition').textContent = 'Select a routine to start';
+                document.getElementById('nextUp').textContent = '';
+                document.getElementById('setProgress').textContent = '';
+                document.querySelector('.timer-display').className = 'timer-display';
+                return;
+            }
+
+            const currentSet = currentRoutine.sets[currentSetIndex];
+            const timerDisplay = document.querySelector('.timer-display');
+            
+            // Update set progress
+            const totalSets = currentRoutine.sets.reduce((total, set) => total + set.repetitions, 0);
+            const completedSets = currentRoutine.sets.slice(0, currentSetIndex).reduce((total, set) => total + set.repetitions, 0) + currentRepIndex;
+            const currentSetNum = completedSets + 1;
+            document.getElementById('setProgress').textContent = `Set ${currentSetNum} of ${totalSets}`;
+            
+            if (currentPhase === 'work') {
+                document.getElementById('currentPosition').textContent = `${currentSet.position} (${currentRepIndex + 1}/${currentSet.repetitions})`;
+                timerDisplay.className = 'timer-display working';
+                
+                // Show what's next
+                if (currentSet.restDuration > 0) {
+                    document.getElementById('nextUp').textContent = 'Next: Rest';
+                } else {
+                    const nextInfo = getNextInfo();
+                    document.getElementById('nextUp').textContent = `Next: ${nextInfo}`;
+                }
+            } else {
+                document.getElementById('currentPosition').textContent = 'Rest';
+                timerDisplay.className = 'timer-display resting';
+                
+                // Show what's next
+                const nextInfo = getNextInfo();
+                document.getElementById('nextUp').textContent = `Next: ${nextInfo}`;
+            }
+        }
+
+        function getNextInfo() {
+            const currentSet = currentRoutine.sets[currentSetIndex];
+            
+            if (currentRepIndex + 1 < currentSet.repetitions) {
+                // More reps in current set
+                return `${currentSet.position} (${currentRepIndex + 2}/${currentSet.repetitions})`;
+            } else if (currentSetIndex + 1 < currentRoutine.sets.length) {
+                // Next set
+                const nextSet = currentRoutine.sets[currentSetIndex + 1];
+                return `${nextSet.position} (1/${nextSet.repetitions})`;
+            } else {
+                // End of routine
+                return 'Finish!';
+            }
+        }
+
+        function updateControlButtons() {
+            const startBtn = document.getElementById('startBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            
+            if (isRunning) {
+                startBtn.disabled = true;
+                pauseBtn.disabled = false;
+                stopBtn.disabled = false;
+            } else if (isPaused) {
+                startBtn.disabled = false;
+                pauseBtn.disabled = true;
+                stopBtn.disabled = false;
+            } else {
+                startBtn.disabled = !currentRoutine;
+                pauseBtn.disabled = true;
+                stopBtn.disabled = true;
+            }
+        }
+
+        // Modal functions
+        function showCreateModal() {
+            editingRoutineId = null;
+            document.getElementById('modalTitle').textContent = 'Create New Routine';
+            document.getElementById('routineName').value = '';
+            document.getElementById('setsContainer').innerHTML = '';
+            addSet(); // Start with one set
+            document.getElementById('routineModal').style.display = 'block';
+        }
+
+        function editCurrentRoutine() {
+            if (!currentRoutine) return;
+            
+            const routineIndex = document.getElementById('routineSelect').value;
+            editingRoutineId = routineIndex;
+            
+            document.getElementById('modalTitle').textContent = 'Edit Routine';
+            document.getElementById('routineName').value = currentRoutine.name;
+            
+            const container = document.getElementById('setsContainer');
+            container.innerHTML = '';
+            
+            currentRoutine.sets.forEach((set, index) => {
+                addSet();
+                const setElement = container.lastElementChild;
+                setElement.querySelector('.position-select').value = set.position;
+                setElement.querySelector('.work-duration').value = set.workDuration;
+                setElement.querySelector('.rest-duration').value = set.restDuration;
+                setElement.querySelector('.repetitions').value = set.repetitions;
+            });
+            
+            document.getElementById('routineModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('routineModal').style.display = 'none';
+        }
+
+        function addSet() {
+            const container = document.getElementById('setsContainer');
+            const setIndex = container.children.length;
+            
+            const setDiv = document.createElement('div');
+            setDiv.className = 'set-item';
+            setDiv.innerHTML = `
+                <div class="set-controls">
+                    <span>Set ${setIndex + 1}</span>
+                    <button class="btn btn-secondary" onclick="duplicateSet(this)">Duplicate</button>
+                    <button class="btn btn-danger" onclick="removeSet(this)">Remove</button>
+                </div>
+                <div class="set-fields">
+                    <select class="form-select position-select">
+                        ${handPositions.map(pos => `<option value="${pos}">${pos}</option>`).join('')}
+                    </select>
+                    <input type="number" class="form-input work-duration" placeholder="Work (s)" min="1" value="7">
+                    <input type="number" class="form-input rest-duration" placeholder="Rest (s)" min="0" value="3">
+                    <input type="number" class="form-input repetitions" placeholder="Reps" min="1" value="1">
+                </div>
+            `;
+            
+            container.appendChild(setDiv);
+            updateSetNumbers();
+        }
+
+        function duplicateSet(button) {
+            const setElement = button.closest('.set-item');
+            const position = setElement.querySelector('.position-select').value;
+            const workDuration = setElement.querySelector('.work-duration').value;
+            const restDuration = setElement.querySelector('.rest-duration').value;
+            const repetitions = setElement.querySelector('.repetitions').value;
+            
+            // Add new set
+            addSet();
+            
+            // Fill with duplicated values
+            const container = document.getElementById('setsContainer');
+            const newSetElement = container.lastElementChild;
+            newSetElement.querySelector('.position-select').value = position;
+            newSetElement.querySelector('.work-duration').value = workDuration;
+            newSetElement.querySelector('.rest-duration').value = restDuration;
+            newSetElement.querySelector('.repetitions').value = repetitions;
+        }
+
+        function removeSet(button) {
+            button.closest('.set-item').remove();
+            updateSetNumbers();
+        }
+
+        function updateSetNumbers() {
+            const container = document.getElementById('setsContainer');
+            Array.from(container.children).forEach((setElement, index) => {
+                setElement.querySelector('.set-controls span').textContent = `Set ${index + 1}`;
+            });
+        }
+
+        function saveRoutine() {
+            const name = document.getElementById('routineName').value.trim();
+            if (!name) {
+                alert('Please enter a routine name');
+                return;
+            }
+
+            const sets = [];
+            const setElements = document.querySelectorAll('.set-item');
+            
+            setElements.forEach(setElement => {
+                const position = setElement.querySelector('.position-select').value;
+                const workDuration = parseInt(setElement.querySelector('.work-duration').value);
+                const restDuration = parseInt(setElement.querySelector('.rest-duration').value);
+                const repetitions = parseInt(setElement.querySelector('.repetitions').value);
+                
+                if (workDuration > 0 && repetitions > 0) {
+                    sets.push({ position, workDuration, restDuration, repetitions });
+                }
+            });
+
+            if (sets.length === 0) {
+                alert('Please add at least one set');
+                return;
+            }
+
+            const routine = { name, sets };
+
+            if (editingRoutineId !== null) {
+                // Editing existing routine
+                routines[editingRoutineId] = routine;
+                if (currentRoutine && routines[editingRoutineId] === currentRoutine) {
+                    currentRoutine = routine;
+                }
+            } else {
+                // Creating new routine
+                routines.push(routine);
+            }
+
+            saveToStorage();
+            updateRoutineDropdown();
+            closeModal();
+            
+            // Auto-select the routine if it was just created
+            if (editingRoutineId === null) {
+                const select = document.getElementById('routineSelect');
+                select.value = routines.length - 1;
+                selectRoutine();
+            }
+        }
+
+        function deleteCurrentRoutine() {
+            if (!currentRoutine) return;
+            
+            if (confirm(`Are you sure you want to delete "${currentRoutine.name}"?`)) {
+                const routineIndex = document.getElementById('routineSelect').value;
+                routines.splice(routineIndex, 1);
+                saveToStorage();
+                updateRoutineDropdown();
+                
+                currentRoutine = null;
+                document.getElementById('routineSelect').value = '';
+                selectRoutine();
+            }
+        }
+
+        // Prevent timer from running in background
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && isRunning) {
+                pauseTimer();
+            }
+        });
+    </script>
+</body>
+</html>
